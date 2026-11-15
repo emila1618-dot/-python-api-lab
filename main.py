@@ -2,7 +2,7 @@
 import json
 from pathlib import Path
 import requests
-
+from datetime import datetime, timezone
 # API 1 - GitHub
 github_url = "https://api.github.com/repos/python/cpython"
 
@@ -24,7 +24,7 @@ def get_data(url):
 
 def main():
     github = get_data(github_url)
-    clock = get_data(time_url)
+    clock = {"datetime": datetime.now(timezone.utc).isoformat()}
     if github is None or clock is None:
         print("Nie udało się pobrać danych z API.")
         return
