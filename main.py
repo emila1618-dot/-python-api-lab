@@ -9,15 +9,25 @@ github_url = "https://api.github.com/repos/python/cpython"
 # API 2 - aktualna godzina
 time_url = "https://worldtimeapi.org/api/timezone/Etc/UTC"
 
+
+import requests
+
 def get_data(url):
-    response = requests.get(url, timeout=15)
-    response.raise_for_status()
-    return response.json()
+    try:
+        response = requests.get(url, timeout=15)
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.RequestException as error:
+        print(f"Błąd połączenia z {url}: {error}")
+        return None
+
 
 def main():
     github = get_data(github_url)
     clock = get_data(time_url)
-
+    if github is None or clock is None:
+        print("Nie udało się pobrać danych z API.")
+        return
     report = {
         "project": github["full_name"],
         "description": github["description"],
